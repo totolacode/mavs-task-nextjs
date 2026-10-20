@@ -1,0 +1,10 @@
+# OS
+.DS_Store
+
+# pgAdmin のローカルストレージ
+/pgadmin/
+
+# 環境変数
+.env
+.env*.local
+!.env.example
