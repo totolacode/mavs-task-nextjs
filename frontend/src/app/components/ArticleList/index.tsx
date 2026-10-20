@@ -55,6 +55,48 @@ export default function ArticleList() {
 		fetchArticles();
 	}, [loginData, router, setLoginData]);
 
+  	// メモを削除する
+	const handleDelete = async (id: number) => {
+		if (!loginData) {
+			router.push("/signin");
+			return;
+		}
+
+		// 誤操作を防ぐため、確認する
+		if (!window.confirm("このメモを削除しますか？")) return;
+
+		try {
+			const response = await fetch(
+				`${process.env.NEXT_PUBLIC_API_BASE_URL}/articles/${id}`,
+				{
+					method: "DELETE",
+					headers: {
+						Authorization: loginData.token,
+					},
+				},
+			);
+
+			// トークンが無効・期限切れの場合は、ログアウトしてサインイン画面へ移動する
+			if (response.status === 401) {
+				setLoginData(undefined);
+				router.push("/signin");
+				return;
+			}
+
+			if (!response.ok) {
+				alert("削除に失敗しました。");
+				return;
+			}
+
+			// 削除したメモを、画面の一覧から取り除く
+			setArticles((prev) => prev?.filter((article) => article.id !== id));
+		} catch (error) {
+			// API に接続できない場合
+			console.error(error);
+			alert("サーバーに接続できませんでした。");
+		}
+	};
+
 	if (errorMessage) {
 		return <p className={styles.articleList_error}>{errorMessage}</p>;
 	}
@@ -75,6 +117,7 @@ export default function ArticleList() {
 					<p>{article.content}</p>
 					<p>作成日時：{new Date(article.created_at).toLocaleString("ja-JP")}</p>
 					<p>更新日時：{new Date(article.updated_at).toLocaleString("ja-JP")}</p>
+          <button onClick={() => handleDelete(article.id)}>削除</button>
 				</li>
 			))}
 		</ul>
