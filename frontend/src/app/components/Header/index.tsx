@@ -5,7 +5,7 @@ import { useLoginData } from "@/app/hooks/useLoginData";
 
 export default function Header() {
 	const router = useRouter();
-	const { loginData, setLoginData } = useLoginData();
+	const { loginData, setLoginData, isLoaded } = useLoginData();
 
 	const logout = () => {
 		setLoginData(undefined);
@@ -17,22 +17,26 @@ export default function Header() {
 				メモアプリ
 			</h1>
 			<div>
-				{loginData && (
-					<div>
-						<p>ようこそ！</p>
-						<p>{loginData?.email}さん</p>
-					</div>
-				)}
+				{isLoaded && (
+					<>
+						{loginData && (
+							<div>
+								<p>ようこそ！</p>
+								<p>{loginData?.email}さん</p>
+							</div>
+						)}
 
-				{loginData ? (
-					<button onClick={logout}>ログアウト</button>
-				) : (
-					<button
-						className={styles.header_button}
-						onClick={() => router.push("/signin")}
-					>
-						サインイン
-					</button>
+						{loginData ? (
+							<button onClick={logout}>ログアウト</button>
+						) : (
+							<button
+								className={styles.header_button}
+								onClick={() => router.push("/signin")}
+							>
+								サインイン
+							</button>
+						)}
+					</>
 				)}
 			</div>
 		</div>

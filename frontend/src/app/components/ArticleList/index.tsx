@@ -9,13 +9,16 @@ import type { Article } from "@/app/types/Article/Article";
 
 export default function ArticleList() {
 	const router = useRouter();
-	const { loginData, setLoginData } = useLoginData();
+	const { loginData, setLoginData, isLoaded } = useLoginData();
 
 	// 取得前は undefined、取得後はメモの配列
 	const [articles, setArticles] = useState<Article[] | undefined>(undefined);
 	const [errorMessage, setErrorMessage] = useState("");
 
 	useEffect(() => {
+		// ログイン情報の読み込みが終わるまで待つ
+		if (!isLoaded) return;
+
 		// ログインしていない場合はサインイン画面へ移動する
 		if (!loginData) {
 			router.push("/signin");
@@ -55,7 +58,7 @@ export default function ArticleList() {
 			}
 		};
 		fetchArticles();
-	}, [loginData, router, setLoginData]);
+	}, [isLoaded, loginData, router, setLoginData]);
 
   	// メモを削除する
 	const handleDelete = async (id: number) => {

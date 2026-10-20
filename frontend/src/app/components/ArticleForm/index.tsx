@@ -14,7 +14,7 @@ type Props = {
 
 export default function ArticleForm({ articleId }: Props) {
 	const router = useRouter();
-	const { loginData, setLoginData } = useLoginData();
+	const { loginData, setLoginData, isLoaded } = useLoginData();
 	const {
 		register,
 		handleSubmit,
@@ -24,6 +24,9 @@ export default function ArticleForm({ articleId }: Props) {
 	const isEdit = articleId !== undefined;
 
 	useEffect(() => {
+		// ログイン情報の読み込みが終わるまで待つ
+		if (!isLoaded) return;
+		
 		// ログインしていない場合は、サインイン画面へ移動する
 		if (!loginData) {
 			router.push("/signin");
@@ -66,7 +69,8 @@ export default function ArticleForm({ articleId }: Props) {
 			}
 		};
 		fetchArticle();
-	}, [loginData, router, setLoginData, isEdit, articleId, reset]);
+	}, [isLoaded, loginData, router, setLoginData, isEdit, articleId, reset]);
+
 
 	const onSubmit = handleSubmit(async (request: ArticleRequest) => {
 		if (!loginData) return;
