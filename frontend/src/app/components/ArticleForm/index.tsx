@@ -2,6 +2,7 @@
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import styles from "./articleForm.module.css";
 import { useLoginData } from "@/app/hooks/useLoginData";
 import type { Article } from "@/app/types/Article/Article";
@@ -115,12 +116,16 @@ export default function ArticleForm({ articleId }: Props) {
 		}
 	});
 
-	return (
-		<form onSubmit={onSubmit} className={styles.articleForm}>
-			<label className={styles.articleForm_label}>
-				タイトル
+		return (
+		<form onSubmit={onSubmit} className={`card ${styles.articleForm}`}>
+			<div className="field">
+				<label htmlFor="title" className="label">
+					タイトル
+				</label>
 				<input
-					className={styles.articleForm_input}
+					id="title"
+					className="input"
+					placeholder="例：買い物リスト"
 					{...register("title", {
 						required: "タイトルを入力してください。",
 						validate: (value) =>
@@ -131,30 +136,36 @@ export default function ArticleForm({ articleId }: Props) {
 						},
 					})}
 				/>
-			</label>
-			{errors.title && (
-				<p className={styles.articleForm_error}>{errors.title.message}</p>
-			)}
+				{errors.title && <p className="errorText">{errors.title.message}</p>}
+			</div>
 
-			<label className={styles.articleForm_label}>
-				本文
+			<div className="field">
+				<label htmlFor="content" className="label">
+					本文
+				</label>
 				<textarea
-					className={styles.articleForm_input}
-					rows={8}
+					id="content"
+					className="input"
+					placeholder="メモの内容を入力してください"
 					{...register("content", {
 						required: "本文を入力してください。",
 						validate: (value) =>
 							value.trim() !== "" || "本文を入力してください。",
 					})}
 				/>
-			</label>
-			{errors.content && (
-				<p className={styles.articleForm_error}>{errors.content.message}</p>
-			)}
+				{errors.content && (
+					<p className="errorText">{errors.content.message}</p>
+				)}
+			</div>
 
-			<button type="submit" disabled={isSubmitting}>
-				{isSubmitting ? "保存中..." : "保存"}
-			</button>
+			<div className={styles.articleForm_actions}>
+				<Link href="/" className="btn btn-secondary">
+					キャンセル
+				</Link>
+				<button type="submit" className="btn btn-primary" disabled={isSubmitting}>
+					{isSubmitting ? "保存中..." : "保存"}
+				</button>
+			</div>
 		</form>
 	);
 }
