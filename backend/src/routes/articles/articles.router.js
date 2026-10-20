@@ -51,11 +51,31 @@ router.delete('/:id', authenticate, async (req, res, next) => {
 /**
  * メモ新規登録
  */
-router.get('/createArticle', authenticate, async (req, res, next) => {
+router.post('/', authenticate, async (req, res, next) => {
   try {
-    let body = {};
+    // トークンからユーザーIDを取得する
+    const userId = req.jwtPayload.id;
+    // リクエストパラメーター
+    const { title, content } = req.body;
 
-    res.status(200).json(body);
+    // 入力チェック：タイトル・本文は必須（空白だけも不可）
+    if (
+      typeof title !== 'string' ||
+      typeof content !== 'string' ||
+      title.trim() === '' ||
+      content.trim() === ''
+    ) {
+      return res.status(400).json({ message: 'タイトルと本文は必須です。' });
+    }
+    // 入力チェック：タイトルは255文字以内
+    if (title.length > 255) {
+      return res.status(400).json({ message: 'タイトルは255文字以内で入力してください。' });
+    }
+
+    // メモを登録する
+    const resArticle = await articleService.createArticle(userId, title, content);
+
+    res.status(201).json(resArticle);
   } catch (error) {
     console.error(error);
     res.status(500).json({});

@@ -1,0 +1,19 @@
+.articleForm {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+	max-width: 600px;
+}
+.articleForm_label {
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+}
+.articleForm_input {
+	padding: 8px;
+	font-size: 14px;
+}
+.articleForm_error {
+	color: #d00;
+	font-size: 12px;
+}

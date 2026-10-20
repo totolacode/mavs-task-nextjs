@@ -45,6 +45,33 @@ class ArticleService {
   }
 
   /**
+   * メモ新規登録
+   * @param user_id ログインユーザーID
+   * @param title タイトル
+   * @param content 本文
+   * @return 登録したメモ情報
+   */
+  async createArticle(user_id, title, content) {
+    // ログインユーザーを作成者として、メモを登録する
+    const row = await db.Articles.create({
+      title: title,
+      content: content,
+      author_id: user_id,
+    });
+
+    // 登録したデータを返却形式に整形して返却する
+    const resData = {
+      id: row.dataValues.id,
+      title: row.dataValues.title,
+      content: row.dataValues.content,
+      created_at: row.dataValues.created_at,
+      updated_at: row.dataValues.updated_at,
+    };
+    return resData;
+  }
+
+
+  /**
    * 記事情報取得
    * @param user_id
    * @return ランダム値
