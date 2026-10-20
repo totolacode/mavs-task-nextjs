@@ -1,19 +1,32 @@
-# Next.js + Express.js のベースプロジェクトです。
+# メモアプリ（Next.js + Express.js）
+
+1日課題で作成した、ログイン機能付きのメモアプリです。
+ログインしたユーザーが、自分のメモを一覧・作成・編集・削除できます。
+
+## 実装した機能
+
+- メールアドレス・パスワードでログイン
+- ログイン中ユーザーのメモ一覧表示・削除
+- メモの新規作成・編集（タイトル・本文）
+- リロードしてもログイン状態を保持
+- 入力チェック、エラー表示、画面デザインの整備
+
+## ドキュメント
+
+- [画面仕様書](docs/screen-spec.md)
+- [開発のまとめ](docs/development.md)（開発の進め方・工夫した点・つまずいた点・振り返り）
+
+
 
 ## 環境構築方法
 
 Node のバージョンは 24.2.0 です。  
 mise をインストールしている場合は、ルートディレクトリで `mise install` を実行するとバージョンが切り替わります。
 
-### リポジトリのフォーク
-
-リポジトリの右上にあるフォークボタンをクリック
-
-https://github.com/user-attachments/assets/c27496ba-cb8d-4cf4-9593-6fb84018120f
+### リポジトリの取得
 
 ```
-git clone git@github.com:ユーザー名/mavs-task-nextjs.git
-cd mavs-task-nextjs
+git clone https://github.com/totolacode/mavs-task-nextjs.git
 ```
 
 ### パッケージインストール
