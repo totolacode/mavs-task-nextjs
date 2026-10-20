@@ -1,0 +1,14 @@
+.articleList {
+	list-style: none;
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+}
+.articleList_item {
+	border: 1px solid #ccc;
+	border-radius: 8px;
+	padding: 12px;
+}
+.articleList_error {
+	color: #d00;
+}

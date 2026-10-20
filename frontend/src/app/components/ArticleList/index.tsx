@@ -1,0 +1,82 @@
+"use client";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import styles from "./articleList.module.css";
+import { useLoginData } from "@/app/hooks/useLoginData";
+import type { Article } from "@/app/types/Article/Article";
+
+export default function ArticleList() {
+	const router = useRouter();
+	const { loginData, setLoginData } = useLoginData();
+
+	// 取得前は undefined、取得後はメモの配列
+	const [articles, setArticles] = useState<Article[] | undefined>(undefined);
+	const [errorMessage, setErrorMessage] = useState("");
+
+	useEffect(() => {
+		// ログインしていない場合はサインイン画面へ移動する
+		if (!loginData) {
+			router.push("/signin");
+			return;
+		}
+
+		const fetchArticles = async () => {
+			try {
+				const response = await fetch(
+					`${process.env.NEXT_PUBLIC_API_BASE_URL}/articles`,
+					{
+						headers: {
+							Authorization: loginData.token,
+						},
+					},
+				);
+
+				// トークンが無効・期限切れの場合は、ログアウトしてサインイン画面へ移動する
+				if (response.status === 401) {
+					setLoginData(undefined);
+					router.push("/signin");
+					return;
+				}
+
+				// それ以外のエラー（500 など）
+				if (!response.ok) {
+					setErrorMessage("メモの取得に失敗しました。");
+					return;
+				}
+
+				const data: Article[] = await response.json();
+				setArticles(data);
+			} catch (error) {
+				// API に接続できない場合
+				console.error(error);
+				setErrorMessage("サーバーに接続できませんでした。");
+			}
+		};
+		fetchArticles();
+	}, [loginData, router, setLoginData]);
+
+	if (errorMessage) {
+		return <p className={styles.articleList_error}>{errorMessage}</p>;
+	}
+
+	if (!articles) {
+		return <p>読み込み中...</p>;
+	}
+
+	if (articles.length === 0) {
+		return <p>メモがありません。</p>;
+	}
+
+	return (
+		<ul className={styles.articleList}>
+			{articles.map((article) => (
+				<li key={article.id} className={styles.articleList_item}>
+					<h3>{article.title}</h3>
+					<p>{article.content}</p>
+					<p>作成日時：{new Date(article.created_at).toLocaleString("ja-JP")}</p>
+					<p>更新日時：{new Date(article.updated_at).toLocaleString("ja-JP")}</p>
+				</li>
+			))}
+		</ul>
+	);
+}
