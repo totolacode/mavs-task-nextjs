@@ -21,9 +21,10 @@ class AuthService {
    * jwtトークン発行
    * @param params
    */
-  createToken(email) {
+  createToken(user) {
     const payload = {
-      email: email,
+      id: user.id,
+      email: user.email,
     };
     const token = jwt.sign(payload, config.jwt.secret, config.jwt.options);
     return token;

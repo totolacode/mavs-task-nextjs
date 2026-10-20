@@ -22,14 +22,15 @@ router.post('/signin', async (req, res, next) => {
     // パラメータ存在しない場合は再ログインを促すため、空で返却する
     if (!resSearchUser.length) return res.status(200).json({});
 
-    console.log(email);
+    console.log(resSearchUser[0]);
 
     // トークンを発行する
-    const resCreateToken = await authService.createToken(email);
+    const resCreateToken = await authService.createToken(resSearchUser[0]);
 
     // 返却用データを生成
     const body = {
-      email: email,
+      id: resSearchUser[0].id,
+      email: resSearchUser[0].email,
       token: resCreateToken,
     };
 
