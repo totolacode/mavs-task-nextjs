@@ -2,8 +2,8 @@ import LoginForm from "../../components/LoginForm";
 
 export default function Signin() {
 	return (
-		<div>
-			<h2>サインイン</h2>
+		<div className="card authCard">
+			<h2 className="pageTitle">サインイン</h2>
 			<LoginForm />
 		</div>
 	);

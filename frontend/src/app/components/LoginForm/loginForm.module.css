@@ -1,4 +1,5 @@
-.loginForm_input {
-	display: block;
-	margin-bottom: 8px;
+.loginForm {
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
 }
