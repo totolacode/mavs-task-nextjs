@@ -24,6 +24,31 @@ router.get('/', authenticate, async (req, res, next) => {
 });
 
 /**
+ * メモ削除
+ */
+router.delete('/:id', authenticate, async (req, res, next) => {
+  try {
+    // トークンからユーザーIDを取得する
+    const userId = req.jwtPayload.id;
+    // パスパラメータからメモIDを取得する
+    const articleId = req.params.id;
+
+    // ログインユーザーのメモを削除する
+    const deleteCount = await articleService.deleteArticle(userId, articleId);
+
+    // 削除件数が0の場合は、対象なしとして404を返す
+    if (deleteCount === 0) {
+      return res.status(404).json({ message: 'メモが見つかりませんでした。' });
+    }
+
+    res.status(204).end();
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({});
+  }
+});
+
+/**
  * メモ新規登録
  */
 router.get('/createArticle', authenticate, async (req, res, next) => {

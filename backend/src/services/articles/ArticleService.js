@@ -30,6 +30,21 @@ class ArticleService {
   }
 
   /**
+   * メモ削除
+   * @param user_id
+   * @param article_id
+   * @return 削除件数（0の場合は対象なし）
+   */
+  async deleteArticle(user_id, article_id) {
+    // ユーザーIDと記事IDをキーにメモを削除する
+    const deleteCount = await db.Articles.destroy({
+      where: { author_id: user_id, id: article_id },
+    });
+
+    return deleteCount;
+  }
+
+  /**
    * 記事情報取得
    * @param user_id
    * @return ランダム値
