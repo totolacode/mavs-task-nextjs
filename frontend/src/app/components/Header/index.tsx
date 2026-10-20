@@ -1,4 +1,5 @@
 "use client";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import styles from "./header.module.css";
 import { useLoginData } from "@/app/hooks/useLoginData";
@@ -11,34 +12,32 @@ export default function Header() {
 		setLoginData(undefined);
 		router.push("/");
 	};
-	return (
-		<div className={styles.header}>
-			<h1 className={styles.header_logo} onClick={() => router.push("/")}>
-				メモアプリ
-			</h1>
-			<div>
-				{isLoaded && (
-					<>
-						{loginData && (
-							<div>
-								<p>ようこそ！</p>
-								<p>{loginData?.email}さん</p>
-							</div>
-						)}
 
+	return (
+		<header className={styles.header}>
+			<div className={styles.header_inner}>
+				<Link href="/" className={styles.header_logo}>メモアプリ</Link>
+
+				{/* ログイン情報の読み込みが終わってから表示する */}
+				{isLoaded && (
+					<div className={styles.header_user}>
 						{loginData ? (
-							<button onClick={logout}>ログアウト</button>
+							<>
+								<span className={styles.header_email}>
+									{loginData.email} さん
+								</span>
+								<button className="btn btn-secondary btn-small" onClick={logout}>
+									ログアウト
+								</button>
+							</>
 						) : (
-							<button
-								className={styles.header_button}
-								onClick={() => router.push("/signin")}
-							>
+							<Link href="/signin" className="btn btn-primary btn-small">
 								サインイン
-							</button>
+							</Link>
 						)}
-					</>
+					</div>
 				)}
 			</div>
-		</div>
+		</header>
 	);
 }

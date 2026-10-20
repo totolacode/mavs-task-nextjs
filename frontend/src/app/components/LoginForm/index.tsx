@@ -39,14 +39,36 @@ export default function LoginForm() {
 		}
 	});
 	return (
-		<form onSubmit={onSubmit}>
-			<input className={styles.loginForm_input} {...register("email")} />
-			<input
-				className={styles.loginForm_input}
-				{...register("password")}
-				type="password"
-			/>
-			<button>送信</button>
+		<form onSubmit={onSubmit} className={styles.loginForm}>
+			<div className="field">
+				<label htmlFor="email" className="label">
+					メールアドレス
+				</label>
+				<input
+					id="email"
+					type="email"
+					className="input"
+					autoComplete="email"
+					{...register("email")}
+				/>
+			</div>
+
+			<div className="field">
+				<label htmlFor="password" className="label">
+					パスワード
+				</label>
+				<input
+					id="password"
+					type="password"
+					className="input"
+					autoComplete="current-password"
+					{...register("password")}
+				/>
+			</div>
+
+			<button type="submit" className="btn btn-primary">
+				サインイン
+			</button>
 		</form>
 	);
 }

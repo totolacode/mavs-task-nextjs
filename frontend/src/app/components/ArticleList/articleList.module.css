@@ -2,13 +2,55 @@
 	list-style: none;
 	display: flex;
 	flex-direction: column;
-	gap: 12px;
+	gap: 16px;
 }
-.articleList_item {
-	border: 1px solid #ccc;
-	border-radius: 8px;
-	padding: 12px;
+.articleList_title {
+	font-size: 18px;
+	font-weight: 700;
+	margin-bottom: 8px;
+	word-break: break-word;
+}
+/* 本文は改行を活かし、3行を超えたら「…」で省略する */
+.articleList_content {
+	white-space: pre-wrap;
+	word-break: break-word;
+	display: -webkit-box;
+	-webkit-line-clamp: 3;
+	-webkit-box-orient: vertical;
+	overflow: hidden;
+}
+.articleList_footer {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	flex-wrap: wrap;
+	gap: 12px;
+	margin-top: 16px;
+	padding-top: 12px;
+	border-top: 1px solid var(--color-border);
+}
+.articleList_date {
+	font-size: 12px;
+	color: var(--color-muted);
+}
+.articleList_actions {
+	display: flex;
+	gap: 8px;
+}
+.articleList_message {
+	color: var(--color-muted);
 }
 .articleList_error {
-	color: #d00;
+	color: var(--color-danger);
+	background: var(--color-danger-bg);
+	border: 1px solid #fecaca;
+	border-radius: var(--radius);
+	padding: 12px 16px;
+}
+.articleList_empty {
+	text-align: center;
+	color: var(--color-muted);
+	padding: 48px 16px;
+	border: 2px dashed var(--color-border);
+	border-radius: 12px;
 }

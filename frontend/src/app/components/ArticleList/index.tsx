@@ -102,28 +102,49 @@ export default function ArticleList() {
 		}
 	};
 
-	if (errorMessage) {
+		if (errorMessage) {
 		return <p className={styles.articleList_error}>{errorMessage}</p>;
 	}
 
 	if (!articles) {
-		return <p>読み込み中...</p>;
+		return <p className={styles.articleList_message}>読み込み中...</p>;
 	}
 
 	if (articles.length === 0) {
-		return <p>メモがありません。</p>;
+		return (
+			<div className={styles.articleList_empty}>
+				<p>メモがありません。</p>
+				<p>「＋ 新規作成」から、最初のメモを作りましょう。</p>
+			</div>
+		);
 	}
 
 	return (
 		<ul className={styles.articleList}>
 			{articles.map((article) => (
-				<li key={article.id} className={styles.articleList_item}>
-					<h3>{article.title}</h3>
-					<p>{article.content}</p>
-					<p>作成日時：{new Date(article.created_at).toLocaleString("ja-JP")}</p>
-					<p>更新日時：{new Date(article.updated_at).toLocaleString("ja-JP")}</p>
-					<Link href={`/articles/${article.id}/edit`}>編集</Link>
-          <button onClick={() => handleDelete(article.id)}>削除</button>
+				<li key={article.id} className="card">
+					<h3 className={styles.articleList_title}>{article.title}</h3>
+					<p className={styles.articleList_content}>{article.content}</p>
+					<div className={styles.articleList_footer}>
+						<p className={styles.articleList_date}>
+							更新：{new Date(article.updated_at).toLocaleString("ja-JP")}
+							（作成：{new Date(article.created_at).toLocaleString("ja-JP")}）
+						</p>
+						<div className={styles.articleList_actions}>
+							<Link
+								href={`/articles/${article.id}/edit`}
+								className="btn btn-secondary btn-small"
+							>
+								編集
+							</Link>
+							<button
+								className="btn btn-danger btn-small"
+								onClick={() => handleDelete(article.id)}
+							>
+								削除
+							</button>
+						</div>
+					</div>
 				</li>
 			))}
 		</ul>
