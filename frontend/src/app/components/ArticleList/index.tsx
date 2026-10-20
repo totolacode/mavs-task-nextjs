@@ -1,9 +1,11 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import styles from "./articleList.module.css";
 import { useLoginData } from "@/app/hooks/useLoginData";
 import type { Article } from "@/app/types/Article/Article";
+
 
 export default function ArticleList() {
 	const router = useRouter();
@@ -117,6 +119,7 @@ export default function ArticleList() {
 					<p>{article.content}</p>
 					<p>作成日時：{new Date(article.created_at).toLocaleString("ja-JP")}</p>
 					<p>更新日時：{new Date(article.updated_at).toLocaleString("ja-JP")}</p>
+					<Link href={`/articles/${article.id}/edit`}>編集</Link>
           <button onClick={() => handleDelete(article.id)}>削除</button>
 				</li>
 			))}

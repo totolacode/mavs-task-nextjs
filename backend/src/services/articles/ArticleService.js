@@ -70,14 +70,45 @@ class ArticleService {
     return resData;
   }
 
+  /**
+   * メモ情報取得
+   * @param user_id ログインユーザーID
+   * @param article_id メモID
+   * @return メモ情報（対象なしの場合は null）
+   */
+  async getArticle(user_id, article_id) {
+    // 持ち主がログインユーザーのメモだけを取得する
+    const row = await db.Articles.findOne({
+      where: { id: article_id, author_id: user_id },
+    });
+    if (!row) return null;
+
+    // 取得したデータを返却形式に整形して返却する
+    const resData = {
+      id: row.dataValues.id,
+      title: row.dataValues.title,
+      content: row.dataValues.content,
+      created_at: row.dataValues.created_at,
+      updated_at: row.dataValues.updated_at,
+    };
+    return resData;
+  }
 
   /**
-   * 記事情報取得
-   * @param user_id
-   * @return ランダム値
+   * メモ更新
+   * @param user_id ログインユーザーID
+   * @param article_id メモID
+   * @param title タイトル
+   * @param content 本文
+   * @return 更新件数（0の場合は対象なし）
    */
-  getArticle(user_id, article_id) {
-    return {};
+  async updateArticle(user_id, article_id, title, content) {
+    // 持ち主がログインユーザーのメモだけを更新する
+    const [updatedCount] = await db.Articles.update(
+      { title: title, content: content },
+      { where: { id: article_id, author_id: user_id } },
+    );
+    return updatedCount;
   }
 }
 
