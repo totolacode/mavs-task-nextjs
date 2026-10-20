@@ -3,5 +3,6 @@
   "password": "root",
   "database": "mavs-task-db",
   "host": "postgres",
-  "dialect": "postgres"
+  "dialect": "postgres",
+  "timezone": "+09:00"
 }

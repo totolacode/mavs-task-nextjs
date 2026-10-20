@@ -30,6 +30,8 @@ services:
     volumes:
       - ./backend:/usr/src/backend
       - mavs-task-api-molules:/usr/src/backend/node_modules
+    environment:
+      TZ: 'Asia/Tokyo'
     command: npm run dev
   postgres:
     image: postgres:12
