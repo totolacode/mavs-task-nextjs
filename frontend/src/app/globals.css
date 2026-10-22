@@ -155,3 +155,8 @@ textarea.input {
 	margin-bottom: 24px;
 	text-align: center;
 }
+.authCard .authLink {
+	margin-top: 0;
+	text-align: center;
+	font-size: 14px;
+}

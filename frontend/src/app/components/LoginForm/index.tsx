@@ -4,6 +4,7 @@ import { LoginRequest } from "@/app/types/Login/LoginReqest";
 import { LoginResponse } from "@/app/types/Login/LoginResponse";
 import { useLoginData } from "@/app/hooks/useLoginData";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import styles from "./loginForm.module.css";
 
 export default function LoginForm() {
@@ -69,6 +70,9 @@ export default function LoginForm() {
 			<button type="submit" className="btn btn-primary">
 				サインイン
 			</button>
+			<p className="authLink">
+				アカウントをお持ちでない方は <Link href="/signup">新規登録</Link>
+			</p>
 		</form>
 	);
 }

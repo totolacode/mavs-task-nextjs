@@ -17,4 +17,7 @@ CREATE TABLE articles (
   FOREIGN KEY (author_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
-INSERT INTO users VALUES (1,'sample','sample@test.com','5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8',CURRENT_TIMESTAMP,CURRENT_TIMESTAMP)
+INSERT INTO users VALUES (1,'sample','sample@test.com','5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8',CURRENT_TIMESTAMP,CURRENT_TIMESTAMP);
+
+-- id を明示してサンプルを登録したため、シーケンスを進めておく（新規登録の id 重複を防ぐ）
+SELECT setval('users_id_seq', (SELECT MAX(id) FROM users));
