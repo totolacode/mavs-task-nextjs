@@ -24,6 +24,24 @@ class UserService {
     return resData;
   }
   /**
+   * ユーザー新規登録
+   * @param 登録内容（name, email, password）
+   * @return 登録したユーザー情報
+   */
+  async createUser({ name, email, password }) {
+    // パスワードはハッシュ化して保存する（サインイン時の照合と同じ方式）
+    const row = await db.Users.create({
+      name,
+      email,
+      password: authService.hashSha256(password),
+    });
+    return {
+      id: row.dataValues.id,
+      name: row.dataValues.name,
+      email: row.dataValues.email,
+    };
+  }
+  /**
    * ユーザー情報検索
    * @param 検索条件
    * @return ユーザー情報リスト

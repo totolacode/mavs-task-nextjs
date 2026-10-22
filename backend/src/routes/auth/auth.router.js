@@ -30,6 +30,7 @@ router.post('/signin', async (req, res, next) => {
     // 返却用データを生成
     const body = {
       id: resSearchUser[0].id,
+      name: resSearchUser[0].name,
       email: resSearchUser[0].email,
       token: resCreateToken,
     };

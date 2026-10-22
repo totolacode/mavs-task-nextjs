@@ -24,16 +24,21 @@ export default function Header() {
 						{loginData ? (
 							<>
 								<span className={styles.header_email}>
-									{loginData.email} さん
+									{loginData.name || loginData.email} さん
 								</span>
 								<button className="btn btn-secondary btn-small" onClick={logout}>
 									ログアウト
 								</button>
 							</>
 						) : (
-							<Link href="/signin" className="btn btn-primary btn-small">
-								サインイン
-							</Link>
+							<>
+								<Link href="/signup" className="btn btn-secondary btn-small">
+									新規登録
+								</Link>
+								<Link href="/signin" className="btn btn-primary btn-small">
+									サインイン
+								</Link>
+							</>
 						)}
 					</div>
 				)}
