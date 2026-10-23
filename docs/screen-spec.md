@@ -176,7 +176,7 @@ flowchart LR
 
 | メソッド | URL | 認証 | 概要 | 主なレスポンス |
 | --- | --- | --- | --- | --- |
-| POST | `/auth/signin` | 不要 | ログイン | 200（成功時は id・name・email・token、失敗時は空） |
+| POST | `/auth/signin` | 不要 | ログイン（`email`・`password` の両方が必要） | 200（成功時は id・name・email・token、失敗時は空） |
 | POST | `/users` | 不要 | ユーザー新規登録 | 201（id・name・email・token）／400（入力不正）／409（メールアドレス重複） |
 | GET | `/articles` | 必要 | ログインユーザーのメモ一覧取得（更新日時の新しい順） | 200 |
 | POST | `/articles` | 必要 | メモ新規登録 | 201／400（入力不正） |

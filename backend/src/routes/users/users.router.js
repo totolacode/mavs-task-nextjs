@@ -49,7 +49,7 @@ router.post('/', async (req, res, next) => {
     if (message) return res.status(400).json({ message });
 
     // メールアドレスの重複チェック
-    const resSearchUser = await userService.searchUser('', '', email, '');
+    const resSearchUser = await userService.searchUser('', '', email);
     if (resSearchUser.length) {
       return res.status(409).json({ message: DUPLICATE_EMAIL_MESSAGE });
     }

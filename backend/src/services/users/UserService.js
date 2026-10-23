@@ -42,11 +42,41 @@ class UserService {
     };
   }
   /**
+   * サインイン時のユーザー認証
+   * メールアドレスとパスワードの両方が一致するユーザーのみ返す
+   * @param メールアドレス
+   * @param パスワード
+   * @return ユーザー情報（一致するユーザーがいない場合は null）
+   */
+  async authenticate(email, password) {
+    // 文字列でない・空の場合は、DBへ問い合わせずに認証失敗とする
+    if (
+      typeof email !== 'string' ||
+      typeof password !== 'string' ||
+      email === '' ||
+      password === ''
+    ) {
+      return null;
+    }
+
+    // メールアドレスとパスワード（ハッシュ）を、どちらも必須の条件にする
+    const row = await db.Users.findOne({
+      where: { email, password: authService.hashSha256(password) },
+    });
+    if (!row) return null;
+
+    return {
+      id: row.dataValues.id,
+      name: row.dataValues.name,
+      email: row.dataValues.email,
+    };
+  }
+  /**
    * ユーザー情報検索
    * @param 検索条件
    * @return ユーザー情報リスト
    */
-  async searchUser(id, name, email, password) {
+  async searchUser(id, name, email) {
     const where = {};
     // IDが指定されている場合はIDを条件へ追加する
     if (id) {
@@ -59,11 +89,6 @@ class UserService {
     // メールアドレスが指定されている場合はメールアドレスを条件へ追加する
     if (email) {
       where.email = email;
-    }
-    // パスワードが指定されている場合はパスワードを条件へ追加する
-    if (password) {
-      const hash_password = authService.hashSha256(password);
-      where.password = hash_password;
     }
 
     // 検索実行
