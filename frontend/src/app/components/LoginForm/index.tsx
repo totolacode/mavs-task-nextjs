@@ -1,8 +1,10 @@
 "use client";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { LoginRequest } from "@/app/types/Login/LoginReqest";
 import { LoginResponse } from "@/app/types/Login/LoginResponse";
 import { useLoginData } from "@/app/hooks/useLoginData";
+import { useRedirectIfLoggedIn } from "@/app/hooks/useRedirectIfLoggedIn";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import styles from "./loginForm.module.css";
@@ -10,35 +12,48 @@ import styles from "./loginForm.module.css";
 export default function LoginForm() {
 	const router = useRouter();
 	const { setLoginData } = useLoginData();
+	const isLoggedIn = useRedirectIfLoggedIn();
+	const [apiError, setApiError] = useState("");
 	const {
 		register,
 		handleSubmit,
-		formState: { errors },
-		reset,
+		formState: { isSubmitting },
+		resetField,
 	} = useForm<LoginRequest>();
 	const onSubmit = handleSubmit(async (request: LoginRequest) => {
-		const response = await fetch(
-			`${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/signin`,
-			{
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
+		setApiError("");
+		try {
+			const response = await fetch(
+				`${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/signin`,
+				{
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+					},
+					body: JSON.stringify({
+						email: request.email,
+						password: request.password,
+					}),
 				},
-				body: JSON.stringify({
-					email: request.email,
-					password: request.password,
-				}),
-			},
-		);
-		const data: LoginResponse = await response.json();
-		if (data.token) {
-			// トークンの保持
-			setLoginData(data);
-			router.push("/");
-		} else {
-			reset();
+			);
+			const data: LoginResponse = await response.json();
+			if (data.token) {
+				// トークンの保持
+				setLoginData(data);
+				router.push("/");
+			} else {
+				// 再入力しやすいよう、パスワードだけクリアする
+				setApiError("メールアドレスまたはパスワードが正しくありません。");
+				resetField("password");
+			}
+		} catch {
+			setApiError("サーバーに接続できませんでした。");
 		}
 	});
+
+	// ログイン済みの場合は、メモ一覧へ移動するまで何も表示しない
+	if (isLoggedIn) return null;
+
 	return (
 		<form onSubmit={onSubmit} className={styles.loginForm}>
 			<div className="field">
@@ -67,8 +82,10 @@ export default function LoginForm() {
 				/>
 			</div>
 
-			<button type="submit" className="btn btn-primary">
-				サインイン
+			{apiError && <p className="errorText">{apiError}</p>}
+
+			<button type="submit" className="btn btn-primary" disabled={isSubmitting}>
+				{isSubmitting ? "サインイン中..." : "サインイン"}
 			</button>
 			<p className="authLink">
 				アカウントをお持ちでない方は <Link href="/signup">新規登録</Link>
