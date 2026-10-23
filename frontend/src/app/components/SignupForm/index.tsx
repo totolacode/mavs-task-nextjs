@@ -6,11 +6,13 @@ import Link from "next/link";
 import { SignupRequest } from "@/app/types/Signup/SignupRequest";
 import { LoginResponse } from "@/app/types/Login/LoginResponse";
 import { useLoginData } from "@/app/hooks/useLoginData";
+import { useRedirectIfLoggedIn } from "@/app/hooks/useRedirectIfLoggedIn";
 import styles from "./signupForm.module.css";
 
 export default function SignupForm() {
 	const router = useRouter();
 	const { setLoginData } = useLoginData();
+	const isLoggedIn = useRedirectIfLoggedIn();
 	const [apiError, setApiError] = useState("");
 	const {
 		register,
@@ -53,6 +55,9 @@ export default function SignupForm() {
 			setApiError("サーバーに接続できませんでした。");
 		}
 	});
+
+	// ログイン済みの場合は、メモ一覧へ移動するまで何も表示しない
+	if (isLoggedIn) return null;
 
 	return (
 		<form onSubmit={onSubmit} className={styles.signupForm}>
